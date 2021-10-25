@@ -1,0 +1,14 @@
+.card-deck{
+    margin-left: 10%;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 80%;
+    margin-top: 150px;
+  }
+  
+  .card{
+    margin: 20px;
+    margin-top: 20px ;
+  
+  }
