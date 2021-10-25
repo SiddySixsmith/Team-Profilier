@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/SiddySixsmith/Team-Profilier#readme",
   "dependencies": {
-    "inquirer": "^8.2.0"
+    "inquirer": "^8.2.0",
+    "jest": "^27.3.1"
   }
 }
