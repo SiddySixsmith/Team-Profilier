@@ -5,24 +5,15 @@ const Engineer = require("./lib/Engineer");
 const Employee = require("./lib/Employee");
 const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
+let info = "";
 
 const employees = [];
 
-const employeeQuestions = [
+const managerQ = [
     {
         type: "input",
         message: "Team managers name?",
         name: "name",
-    },
-    {
-        type: "list",
-        message:"What is your memebers role?",
-        choices:[
-            "Engineer",
-            "Intern",
-            "Manager"
-        ],
-        name:"role"
     },
     {
         type: "input",
@@ -34,57 +25,115 @@ const employeeQuestions = [
         Message: "Manager email?",
         name: "email",
     },
+    {
+        type: "input",
+        message: "Office Number?",
+        name: "officeNumber"
+    }
+
+]
+
+const employeeQuestions = [
+    {
+        type: "input",
+        message: "Team members name?",
+        name: "name",
+    },
+    {
+        type: "input",
+        message: "Employee ID?",
+        name: "EmployeeNumber",
+    },
+    {
+        type: "input",
+        Message: "Manager email?",
+        name: "email",
+    },
+
 ];
-
-function memberAdd(){
-    inquirer.prompt(employeeQuestions)
-    .then(function({name, role, id, email}) {
-        let info = "";
-        if (role === "Engineer") {
-            info = "GitHub username";
-        } else if (role === "Intern") {
-            info = "school";
-        } else {
-            info = "office number";
-        }
+function addManager() {
+    inquirer.prompt(managerQ)
+    .then(function ({ name, id, email, officeNumber }) {
+        let newMember;
+        newMember = new Manager(name, id, email, officeNumber);
+        employees.push(newMember);
+        htmlCreate.createCard(newMember);
         inquirer.prompt([{
-            message: `Enter team member's ${info}`,
-            name: "roleInfo"
-        },
-        {
             type: "list",
-            message: "Would you like to add more team members?",
+            message: "What is your next memebrs role?",
             choices: [
-                "yes",
-                "no"
+                "Engineer",
+                "Intern",
+                "Dont add anyone else"
             ],
-            name: "moreMembers"
+            name: "role"
         }])
-        .then(function({info, moreMembers}) {
-            let newMember;
-            if (role === "Engineer") {
-                newMember = new Engineer(name, id, email, info);
-            } else if (role === "Intern") {
-                newMember = new Intern(name, id, email, info);
-            } else {
-                newMember = new Manager(name, id, email, info);
-            }
-            employees.push(newMember);
-            htmlCreate.createCard(newMember)
-            .then(function() {
-                if (moreMembers === "yes") {
-                    addMember();
-                } else {
-                    htmlCreate.bottomHtml();
-                }
-            });
-        })
-    })
-};
+        .then(function ({ name, role, id, email }) {
 
-function init(){
-htmlCreate.topHtml
-memberAdd()
+            if (role === "Engineer") {
+                info = "GitHub username";
+                memberAdd(info, role, name)
+            } else if (role === "Intern") {
+                info = "school name";
+                memberAdd(info, role, name)
+            } else {
+                htmlCreate.bottomHtml()
+            }
+})
+    });
+
+function memberAdd(info, role, name) {
+    let newMember;
+                    inquirer.prompt([
+                        {
+                            type: "input",
+                            message: "Team members name?",
+                            name: "name",
+                        },
+                        {
+                            type: "input",
+                            message: "Employee ID?",
+                            name: "EmployeeNumber",
+                        },
+                        {
+                            type: "input",
+                            Message: "Manager email?",
+                            name: "email",
+                        },
+                        {
+                            type: "input",
+                            message: `Members ${info}`,
+                            name: "info"
+                        }])
+                        .then(function ({ name, id, email, info, role }) {
+                            if (role === "Engineer") {
+                                newMember = new Engineer(name, id, email, info);
+                                console.log("new engineer created");
+                            } else if (role === "Intern") {
+                                newMember = new Intern(name, id, email, info);
+                                console.log("new Intern created");
+                            } else {
+                                
+                            }
+                            employees.push(newMember);
+                            htmlCreate.createCard(newMember)
+                            .then(function() {
+                                if (role === "Engineer" || "Intern" ) {
+                                    memberAdd();
+                                } else {
+                                    htmlCreate.bottomHtml();
+                                }
+                            }) .catch(function(err){
+                                console.log(err)
+                            }) 
+                        }
+                        );
+                    }
+        }
+
+function init() {
+    htmlCreate.topHtml()
+    addManager()
 };
 
 init()

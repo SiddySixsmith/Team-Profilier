@@ -13,13 +13,13 @@ function topHtml() {
         <meta charset="UTF-8" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <link rel="Stylesheet" href="./dist/css/style.css" />
+        <link rel="stylesheet" href="./css/style.css" />
     </head>
     
     <body>
         <div class="card-deck">
             <div class="card border-success mb-3 .d-flex " style="max-width: 18rem;">`;
-    fs.writeFile("./src/Team-Profile.html", html, function (err) {
+    fs.writeFile("./dist/Team-Profile.html", htmlCode, function (err) {
         if (err) {
             console.log(err);
         }
@@ -36,36 +36,36 @@ function createCard(member){
         let data = "";
         if (role === "Engineer") {
             const gitHub = member.getGithub(); 
-        const data = `
-        <div class="card-header text-white bg-primary border-success">${member.name} <br>
-        ${member.role}</div>
+         data = `
+        <div class="card-header text-white bg-primary border-success">${name} <br>
+        ${role}</div>
         <div class="card-body text-success">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">ID: ${member.id}</li>
-            <li class="list-group-item">Email: ${member.email}</li>
-            <li class="list-group-item">Office number: ${member.gitHub}</li>
+            <li class="list-group-item">ID: ${id}</li>
+            <li class="list-group-item">Email: ${email}</li>
+            <li class="list-group-item">Office number: ${gitHub}</li>
         </ul>
         </div>`
         } else if (role === "intern") {
             const school = member.getSchool(); 
-        const data =`<div class="card-header text-white bg-primary border-success">${member.name} <br>
-        ${member.role}</div>
+         data =`<div class="card-header text-white bg-primary border-success">${name} <br>
+        ${role}</div>
         <div class="card-body text-success">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">ID: ${member.id}</li>
-            <li class="list-group-item">Email: ${member.email}</li>
-            <li class="list-group-item">Office number: ${member.school}</li>
+            <li class="list-group-item">ID: ${id}</li>
+            <li class="list-group-item">Email: ${email}</li>
+            <li class="list-group-item">Office number: ${school}</li>
         </ul>
         </div>`
         } else {
             const officeNumber = member.getOfficeNumber();
-            const data =`<div class="card-header text-white bg-primary border-success">${member.name} <br>
-            ${member.role}</div>
+             data =`<div class="card-header text-white bg-primary border-success">${name} <br>
+            ${role}</div>
             <div class="card-body text-success">
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${member.id}</li>
-                <li class="list-group-item">Email: ${member.email}</li>
-                <li class="list-group-item">Office number: ${member.officeNumber}</li>
+                <li class="list-group-item">ID: ${id}</li>
+                <li class="list-group-item">Email: ${email}</li>
+                <li class="list-group-item">Office number: ${officeNumber}</li>
             </ul>
             </div>`
         }
@@ -87,6 +87,11 @@ function bottomHtml(){
 </body>
 
 </html>`
+fs.appendFile("./dist/Team-Profile.html", htmlCode, function (err) {
+    if (err) {
+        return reject(err);
+    };
+});
 }
 
   module.exports = {topHtml, bottomHtml, createCard};
