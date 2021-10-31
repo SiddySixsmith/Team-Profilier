@@ -1,16 +1,17 @@
 .card-deck{
-    justify-content: center;
+
+
 
   }
   
   .card{
-    margin: 20px;
-width: 200px;
+    margin: 10px;
+width: 250px;
 height: 300px;
   }
 
   section{
-    margin-left: 25%;
+   justify-content: center;
     margin-top: 10%;
     display: flex;
   }
@@ -18,3 +19,15 @@ height: 300px;
   .card-body{
     margin-top: 5px;
   }
+
+  header{
+    height: 150px;
+    background-color:blue ;
+    color: white;
+    
+}
+h1{
+  margin-left: 35%;
+  padding: 50px;
+  
+}

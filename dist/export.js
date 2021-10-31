@@ -15,13 +15,16 @@ function topHtml() {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
-        <link rel="stylesheet" href="./css/style.css" />
+        <link rel="stylesheet" href="./dist/css/style.css" />
     </head>
     
     <body>
+    <header>
+    Team Profile Generator
+    </header>
     <section>
            `;
-    fs.writeFile("./dist/Team-Profile.html", htmlCode, function (err) {
+    fs.writeFile("./Team-Profile.html", htmlCode, function (err) {
         if (err) {
             console.log(err);
         }
@@ -86,7 +89,7 @@ function createCard(member){
             </div>`
         }
         console.log("adding team member");
-        fs.appendFile("./dist/Team-Profile.html", data, function (err) {
+        fs.appendFile("./Team-Profile.html", data, function (err) {
             if (err) {
                 return reject(err);
             };
@@ -103,7 +106,7 @@ function bottomHtml(){
 </body>
 
 </html>`
-fs.appendFile("./dist/Team-Profile.html", htmlCode, function (err) {
+fs.appendFile("./Team-Profile.html", htmlCode, function (err) {
     if (err) {
         return reject(err);
     };
