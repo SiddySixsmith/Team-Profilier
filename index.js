@@ -2,134 +2,72 @@ const inquirer = require("inquirer");
 const fs = require('fs');
 const htmlCreate = require("./dist/export");
 const Engineer = require("./lib/Engineer");
-const Employee = require("./lib/Employee");
 const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
-let info = "";
+const questions = require("./dist/questions.js");
 
 const employees = [];
 
-const managerQ = [
-    {
-        type: "input",
-        message: "Team managers name?",
-        name: "name",
-    },
-    {
-        type: "input",
-        message: "Employee ID?",
-        name: "EmployeeNumber",
-    },
-    {
-        type: "input",
-        Message: "Manager email?",
-        name: "email",
-    },
-    {
-        type: "input",
-        message: "Office Number?",
-        name: "officeNumber"
-    }
 
-]
-
-const employeeQuestions = [
-    {
-        type: "input",
-        message: "Team members name?",
-        name: "name",
-    },
-    {
-        type: "input",
-        message: "Employee ID?",
-        name: "EmployeeNumber",
-    },
-    {
-        type: "input",
-        Message: "Manager email?",
-        name: "email",
-    },
-
-];
 function addManager() {
-    inquirer.prompt(managerQ)
+    inquirer.prompt(questions.managerQ)
     .then(function ({ name, id, email, officeNumber }) {
         let newMember;
         newMember = new Manager(name, id, email, officeNumber);
         employees.push(newMember);
         htmlCreate.createCard(newMember);
-        inquirer.prompt([{
-            type: "list",
-            message: "What is your next memebrs role?",
-            choices: [
-                "Engineer",
-                "Intern",
-                "Dont add anyone else"
-            ],
-            name: "role"
-        }])
-        .then(function ({ name, role, id, email }) {
-
-            if (role === "Engineer") {
-                info = "GitHub username";
-                memberAdd(info, role, name)
-            } else if (role === "Intern") {
-                info = "school name";
-                memberAdd(info, role, name)
-            } else {
-                htmlCreate.bottomHtml()
-            }
-})
+        return askWhoElse();
     });
+    
+}
 
-function memberAdd(info, role, name) {
+function askNonManager(role){
     let newMember;
-                    inquirer.prompt([
-                        {
-                            type: "input",
-                            message: "Team members name?",
-                            name: "name",
-                        },
-                        {
-                            type: "input",
-                            message: "Employee ID?",
-                            name: "EmployeeNumber",
-                        },
-                        {
-                            type: "input",
-                            Message: "Manager email?",
-                            name: "email",
-                        },
-                        {
-                            type: "input",
-                            message: `Members ${info}`,
-                            name: "info"
-                        }])
-                        .then(function ({ name, id, email, info, role }) {
-                            if (role === "Engineer") {
-                                newMember = new Engineer(name, id, email, info);
-                                console.log("new engineer created");
-                            } else if (role === "Intern") {
-                                newMember = new Intern(name, id, email, info);
-                                console.log("new Intern created");
-                            } else {
-                                
-                            }
-                            employees.push(newMember);
-                            htmlCreate.createCard(newMember)
-                            .then(function() {
-                                if (role === "Engineer" || "Intern" ) {
-                                    memberAdd();
-                                } else {
-                                    htmlCreate.bottomHtml();
-                                }
-                            }) .catch(function(err){
-                                console.log(err)
-                            }) 
-                        }
-                        );
-                    }
+    if (role.toLowerCase() === "engineer") {
+    return inquirer.prompt(questions.engineerQ)
+    .then(function ({name, id, email, github}) {
+        newMember = new Engineer(name, id, email, github);
+        console.log("new engineer created");
+        employees.push(newMember);
+        htmlCreate.createCard(newMember)
+    })
+    } 
+    if (role.toLowerCase() === "intern"){
+    return inquirer.prompt(questions.internQ)
+    .then(function ({name, id, email, school}) {
+        newMember = new Intern(name, id, email, school);
+        console.log("new Intern created");
+        employees.push(newMember);
+        htmlCreate.createCard(newMember)
+    })
+    }
+    if (role.toLowerCase() === 'no one'){
+        htmlCreate.bottomHtml();
+        return false;
+    } 
+
+}
+
+function askWhoElse(){
+    inquirer.prompt([{
+        type: "list",
+        message: "Who else wou ld you like to add",
+        choices: [
+            "Engineer",
+            "Intern",
+            "No one"
+        ],
+        name: "role"
+    }])
+    .then(response => {
+        return askNonManager(response.role)
+    })
+    .then(response => {
+        if (response !== false){
+            return askWhoElse()
         }
+    })
+}
 
 function init() {
     htmlCreate.topHtml()
